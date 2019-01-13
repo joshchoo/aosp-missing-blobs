@@ -88,3 +88,6 @@ Other directories with blobs include the following:
 - Etc.
 
 Take note that the more directories you specify as arguments, the longer the program will run for!
+
+### Downloads
+`MissingBlobs.jar` downloads can be found in the [Releases](https://github.com/joshuous/AospMissingBlobs/releases).
