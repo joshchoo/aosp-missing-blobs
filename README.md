@@ -45,10 +45,9 @@ check whether any of these dependencies are not present.
 - java compiler
 
 ### Building
-In the source file directory, execute:
+In the root directory of the repo, execute:
 ```
-$ javac *.java
-$ jar -cvfe MissingBlobs.jar MissingBlobs *.class
+$ make
 ```
 
 A runnable `MissingBlobs.jar` will be produced.
