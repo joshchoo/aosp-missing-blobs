@@ -3,7 +3,9 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class MissingBlobs {
 
@@ -20,10 +22,9 @@ public class MissingBlobs {
 	private HashMap<String, ArrayList<Blob>> dependencyBlobs;
 
 	/*
-	 * Key: Name of missing blob dependency
-	 * Value: Null (unused)
+	 * Value: Name of missing blob dependency
 	 */
-	private HashMap<String, String> missingBlobs;
+	private Set<String> missingBlobs;
 
 	private String expandArrayList(ArrayList<Blob> arr) {
 		StringBuilder expanded = new StringBuilder();
@@ -103,21 +104,20 @@ public class MissingBlobs {
 	}
 
 	public void updateMissingBlobs() {
-		missingBlobs = new HashMap<String, String>();
+		missingBlobs = new HashSet<String>();
 
 		for (Map.Entry<String, ArrayList<Blob>> blob : dependencyBlobs.entrySet()) {
 			String dependencyName = blob.getKey();
 
-			if (missingBlobs.containsKey(dependencyName) || presentBlobs.containsKey(dependencyName))
+			if (missingBlobs.contains(dependencyName) || presentBlobs.containsKey(dependencyName))
 				continue;
 
-			missingBlobs.put(dependencyName, null);
+			missingBlobs.add(dependencyName);
 		}
 	}
 
 	public void showMissingBlobs() {
-		for (Map.Entry<String, String> blob : missingBlobs.entrySet()) {
-			String dependencyName = blob.getKey();
+		for (String dependencyName : missingBlobs) {
 			ArrayList<Blob> blobsWithDependencies = dependencyBlobs.get(dependencyName);
 			System.out.println(dependencyName + " required by: " + expandArrayList(blobsWithDependencies));
 		}
