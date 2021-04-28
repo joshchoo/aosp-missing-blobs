@@ -1,0 +1,16 @@
+[package]
+name = "aosp-missing-blobs"
+version = "0.1.0"
+authors = ["Josh Choo <dev@joshuous.com>"]
+edition = "2018"
+description = """
+aosp-missing-blobs is a nifty tool to identify required blobs (.so) that are missing from AOSP ROM builds,
+and to show which existing blobs rely on them. This will be particularly useful for ROM developers who want
+to ensure that they have not missed out any required proprietary OEM blobs.
+"""
+license = "MIT"
+homepage = "https://github.com/joshuous/aosp-missing-blobs"
+repository = "https://github.com/joshuous/aosp-missing-blobs"
+
+[dependencies]
+goblin = "0.4"
