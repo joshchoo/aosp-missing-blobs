@@ -13,4 +13,5 @@ homepage = "https://github.com/joshuous/aosp-missing-blobs"
 repository = "https://github.com/joshuous/aosp-missing-blobs"
 
 [dependencies]
+anyhow = "1.0.40"
 goblin = "0.4"
