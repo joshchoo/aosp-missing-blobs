@@ -55,7 +55,7 @@ pub fn run(paths: &[String]) -> goblin::error::Result<()> {
 
     let mut missing: Vec<String> = vec![];
 
-    for (dep, _) in &dependencies {
+    for dep in dependencies.keys() {
         if !present.contains(dep) {
             missing.push(dep.to_string());
         }
