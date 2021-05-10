@@ -1,9 +1,10 @@
+use anyhow::Result;
 use goblin::{self, Object};
 use std::collections::HashMap;
 use std::path::Path;
 use std::{collections::HashSet, fs};
 
-pub fn run(paths: &[String]) -> goblin::error::Result<()> {
+pub fn run(paths: &[String]) -> Result<()> {
     let mut dependencies: HashMap<String, Vec<String>> = HashMap::new();
     let mut present: HashSet<String> = HashSet::new();
 
