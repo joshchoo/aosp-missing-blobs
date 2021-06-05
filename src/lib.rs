@@ -3,14 +3,14 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-pub fn run(paths: &[String]) {
+pub fn run(paths: &[&str]) {
     let blob_paths = find_blobs_in_paths(&paths);
     let blobs_to_dependencies = get_dependencies(&blob_paths);
     let missing_blobs = identify_missing(&blobs_to_dependencies);
     display_missing_blobs(&missing_blobs);
 }
 
-fn find_blobs_in_paths(paths: &[String]) -> Vec<PathBuf> {
+fn find_blobs_in_paths(paths: &[&str]) -> Vec<PathBuf> {
     let dirs = paths
         .iter()
         .map(Path::new)
