@@ -1,28 +1,22 @@
 use goblin::{self, Object};
+use ignore::WalkBuilder;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-pub fn run(paths: &[&str]) {
-    let blob_paths = find_blobs_in_paths(&paths);
-    let blobs_to_dependencies = get_dependencies(&blob_paths);
-    let missing_blobs = identify_missing(&blobs_to_dependencies);
-    display_missing_blobs(&missing_blobs);
+pub struct Config {
+    pub recursive: bool,
 }
 
-fn find_blobs_in_paths(paths: &[&str]) -> Vec<PathBuf> {
-    let dirs = paths
-        .iter()
-        .map(Path::new)
-        .filter(|path| path.is_dir())
-        .collect::<Vec<_>>();
+pub fn run(paths: &[&str], config: Config) {
+    let file_paths: Vec<PathBuf> = if config.recursive {
+        find_files_recursively(&paths)
+    } else {
+        find_files(&paths)
+    };
 
-    let blob_paths: Vec<PathBuf> = dirs
+    let blob_paths: Vec<&PathBuf> = file_paths
         .iter()
-        .map(|dir| fs::read_dir(dir).expect("Could not read directory."))
-        .flat_map(|read_dir| {
-            read_dir.map(|dir_entry| dir_entry.expect("Could not read directory entry.").path())
-        })
         .filter(|path| match path.extension() {
             // Assume that valid blobs have ".so" extension.
             Some(ext) => ext == "so",
@@ -30,10 +24,55 @@ fn find_blobs_in_paths(paths: &[&str]) -> Vec<PathBuf> {
         })
         .collect();
 
-    blob_paths
+    let blobs_to_dependencies = get_dependencies(&blob_paths);
+    let missing_blobs = identify_missing(&blobs_to_dependencies);
+    display_missing_blobs(&missing_blobs);
 }
 
-fn get_dependencies(blob_paths: &Vec<PathBuf>) -> HashMap<String, Vec<String>> {
+fn find_files(paths: &[&str]) -> Vec<PathBuf> {
+    let dirs = paths
+        .iter()
+        .map(Path::new)
+        .filter(|path| path.is_dir())
+        .collect::<Vec<_>>();
+
+    let file_paths: Vec<PathBuf> = dirs
+        .iter()
+        .map(|dir| fs::read_dir(dir).expect("Could not read directory."))
+        .flat_map(|read_dir| {
+            read_dir.map(|dir_entry| dir_entry.expect("Could not read directory entry.").path())
+        })
+        .collect();
+
+    file_paths
+}
+
+fn find_files_recursively(paths: &[&str]) -> Vec<PathBuf> {
+    let mut walker = WalkBuilder::new(paths[0]);
+    for path in &paths[1..] {
+        walker.add(path);
+    }
+
+    // Don't read from ignore configs
+    walker
+        .ignore(false)
+        .git_ignore(false)
+        .git_exclude(false)
+        .git_global(false);
+
+    let file_paths = walker
+        .build()
+        .map(|dir_entry| {
+            dir_entry
+                .expect("Could not read directory entry.")
+                .into_path()
+        })
+        .collect();
+
+    file_paths
+}
+
+fn get_dependencies(blob_paths: &Vec<&PathBuf>) -> HashMap<String, Vec<String>> {
     let mut dependencies: HashMap<String, Vec<String>> = HashMap::new();
 
     blob_paths.iter().for_each(|path| {
