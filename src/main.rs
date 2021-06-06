@@ -1,11 +1,10 @@
 use aosp_missing_blobs::{run, Config};
-use clap::{App, Arg};
+use clap::{crate_description, crate_name, crate_version, App, Arg};
 
 fn main() {
-    let matches = App::new("aosp-missing-blobs")
-        .version("0.4.0")
-        .author("Josh Choo <dev@joshuous.com>")
-        .about("An AOSP tool to generate a list of required missing blobs.")
+    let matches = App::new(crate_name!())
+        .version(crate_version!())
+        .about(crate_description!())
         .arg(
             Arg::with_name("PATHS")
                 .help("Paths to blobs")
