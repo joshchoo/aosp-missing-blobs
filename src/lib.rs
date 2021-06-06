@@ -4,15 +4,18 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+/// The main program wrapper.
 pub struct MissingBlobs {
     recursive: bool,
 }
 
 impl MissingBlobs {
+    /// Creates a new MissingBlobs with the given configuration.
     pub fn new(recursive: bool) -> Self {
         Self { recursive }
     }
 
+    /// Searches for blobs in given paths, and display missing dependencies.
     pub fn run(&self, paths: &[&str]) {
         let file_paths: Vec<PathBuf> = if self.recursive {
             find_files_recursively(&paths)
