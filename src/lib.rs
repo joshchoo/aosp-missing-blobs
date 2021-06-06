@@ -4,29 +4,35 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-pub struct Config {
-    pub recursive: bool,
+pub struct MissingBlobs {
+    recursive: bool,
 }
 
-pub fn run(paths: &[&str], config: Config) {
-    let file_paths: Vec<PathBuf> = if config.recursive {
-        find_files_recursively(&paths)
-    } else {
-        find_files(&paths)
-    };
+impl MissingBlobs {
+    pub fn new(recursive: bool) -> Self {
+        Self { recursive }
+    }
 
-    let blob_paths: Vec<&PathBuf> = file_paths
-        .iter()
-        .filter(|path| match path.extension() {
-            // Assume that valid blobs have ".so" extension.
-            Some(ext) => ext == "so",
-            None => false,
-        })
-        .collect();
+    pub fn run(&self, paths: &[&str]) {
+        let file_paths: Vec<PathBuf> = if self.recursive {
+            find_files_recursively(&paths)
+        } else {
+            find_files(&paths)
+        };
 
-    let blobs_to_dependencies = get_dependencies(&blob_paths);
-    let missing_blobs = identify_missing(&blobs_to_dependencies);
-    display_missing_blobs(&missing_blobs);
+        let blob_paths: Vec<&PathBuf> = file_paths
+            .iter()
+            .filter(|path| match path.extension() {
+                // Assume that valid blobs have ".so" extension.
+                Some(ext) => ext == "so",
+                None => false,
+            })
+            .collect();
+
+        let blobs_to_dependencies = get_dependencies(&blob_paths);
+        let missing_blobs = identify_missing(&blobs_to_dependencies);
+        display_missing_blobs(&missing_blobs);
+    }
 }
 
 fn find_files(paths: &[&str]) -> Vec<PathBuf> {

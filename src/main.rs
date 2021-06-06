@@ -1,4 +1,4 @@
-use aosp_missing_blobs::{run, Config};
+use aosp_missing_blobs::MissingBlobs;
 use clap::{crate_description, crate_name, crate_version, App, Arg};
 
 fn main() {
@@ -20,11 +20,7 @@ fn main() {
         .get_matches();
 
     let paths = matches.values_of("PATHS").unwrap().collect::<Vec<_>>();
+    let recursive = matches.is_present("recursive");
 
-    run(
-        &paths,
-        Config {
-            recursive: matches.is_present("recursive"),
-        },
-    );
+    MissingBlobs::new(recursive).run(&paths);
 }
