@@ -66,19 +66,17 @@ fn find_files_recursively(paths: &[&str]) -> Vec<PathBuf> {
         .git_exclude(false)
         .git_global(false);
 
-    let file_paths = walker
+    walker
         .build()
         .map(|dir_entry| {
             dir_entry
                 .expect("Could not read directory entry.")
                 .into_path()
         })
-        .collect();
-
-    file_paths
+        .collect()
 }
 
-fn get_dependencies(blob_paths: &Vec<&PathBuf>) -> HashMap<String, Vec<String>> {
+fn get_dependencies(blob_paths: &[&PathBuf]) -> HashMap<String, Vec<String>> {
     let mut dependencies: HashMap<String, Vec<String>> = HashMap::new();
 
     blob_paths.iter().for_each(|path| {
