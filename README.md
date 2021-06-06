@@ -63,6 +63,12 @@ This program takes as arguments a **list of directories** that contain compiled 
 $ aosp-missing-blobs <blob directory1> <blob directory2> <blob directory3> <blob directoryN>
 ```
 
+Search blob directories recursively:
+
+```
+$ aosp-missing-blobs -r <blob root directory>
+```
+
 #### Example
 
 Assuming you have extracted the ROM's system.img and vendor.img to `~/system` and `~/vendor`, respectively, run the following:
