@@ -39,6 +39,16 @@ and `vendor.qti.hardware.iop@2.0.so`.
 aosp-missing-blobs uses this idea to identify all the dependencies of a given list of blobs, and to
 check whether any of these dependencies are not present.
 
+### Installation
+
+#### Cargo
+
+You can install with `cargo` after [setting up Rust](https://www.rust-lang.org/tools/install):
+
+```
+cargo install aosp-missing-blobs
+```
+
 ### Building
 
 aosp-missing-blobs is written in Rust, hence you'll need [Rust to be installed](https://www.rust-lang.org) to build the project.
@@ -98,7 +108,3 @@ Other directories with blobs include the following:
 - Etc.
 
 Take note that the more directories you specify as arguments, the longer the program will run for!
-
-### Downloads
-
-Binary downloads can be found in the [Releases](https://github.com/joshuous/AospMissingBlobs/releases).
