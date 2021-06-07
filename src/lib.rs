@@ -10,12 +10,12 @@ pub struct MissingBlobs {
 }
 
 impl MissingBlobs {
-    /// Creates a new MissingBlobs with the given configuration.
-    pub fn new(recursive: bool) -> Self {
-        Self { recursive }
+    /// Creates a new MissingBlobs builder.
+    pub fn builder() -> MissingBlobsBuilder {
+        MissingBlobsBuilder::default()
     }
 
-    /// Searches for blobs in given paths, and display missing dependencies.
+    /// Searches for blobs in the given paths, and displays missing dependencies.
     pub fn run(&self, paths: &[&str]) {
         let file_paths: Vec<PathBuf> = if self.recursive {
             find_files_recursively(&paths)
@@ -35,6 +35,32 @@ impl MissingBlobs {
         let blobs_to_dependencies = get_dependencies(&blob_paths);
         let missing_blobs = identify_missing(&blobs_to_dependencies);
         display_missing_blobs(&missing_blobs);
+    }
+}
+
+/// The MissingBlobs builder.
+pub struct MissingBlobsBuilder {
+    recursive: bool,
+}
+
+impl Default for MissingBlobsBuilder {
+    fn default() -> Self {
+        Self { recursive: false }
+    }
+}
+
+impl MissingBlobsBuilder {
+    /// Builds a MissingBlobs.
+    pub fn build(&self) -> MissingBlobs {
+        MissingBlobs {
+            recursive: self.recursive,
+        }
+    }
+
+    /// Sets whether to search paths recursively.
+    pub fn recursive(mut self, enable: bool) -> Self {
+        self.recursive = enable;
+        self
     }
 }
 

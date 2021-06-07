@@ -22,5 +22,8 @@ fn main() {
     let paths = matches.values_of("PATHS").unwrap().collect::<Vec<_>>();
     let recursive = matches.is_present("recursive");
 
-    MissingBlobs::new(recursive).run(&paths);
+    MissingBlobs::builder()
+        .recursive(recursive)
+        .build()
+        .run(&paths);
 }
