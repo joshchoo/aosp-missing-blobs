@@ -116,7 +116,15 @@ fn get_dependencies(blob_paths: &[&PathBuf]) -> HashMap<String, Vec<String>> {
             .expect("Could not convert to string.")
             .to_owned();
 
-        let buffer = fs::read(&path).expect("Could not read path.");
+        let buffer;
+        match fs::read(&path) {
+            Ok(b) => buffer = b,
+            Err(_) => {
+                eprintln!("Warning: Could not read file: {}", path.display());
+                return;
+            },
+        }
+
         let obj = goblin::Object::parse(&buffer);
 
         if let Ok(Object::Elf(elf)) = obj {
