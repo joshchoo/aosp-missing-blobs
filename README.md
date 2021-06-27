@@ -56,7 +56,7 @@ aosp-missing-blobs is written in Rust, hence you'll need [Rust to be installed](
 In the root directory of the repo, execute:
 
 ```
-$ git clone https://github.com/joshuous/aosp-missing-blobs
+$ git clone https://github.com/joshchoo/aosp-missing-blobs
 $ cd aosp-missing-blobs
 $ cargo build --release
 

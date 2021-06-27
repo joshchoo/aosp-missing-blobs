@@ -7,9 +7,9 @@ description = """
 A tool to identify required blobs (.so) that are missing from AOSP ROM builds, and to show which existing blobs depend on them.
 """
 license = "MIT"
-documentation = "https://github.com/joshuous/aosp-missing-blobs"
-homepage = "https://github.com/joshuous/aosp-missing-blobs"
-repository = "https://github.com/joshuous/aosp-missing-blobs"
+documentation = "https://github.com/joshchoo/aosp-missing-blobs"
+homepage = "https://github.com/joshchoo/aosp-missing-blobs"
+repository = "https://github.com/joshchoo/aosp-missing-blobs"
 
 [dependencies]
 clap = "2.33"
