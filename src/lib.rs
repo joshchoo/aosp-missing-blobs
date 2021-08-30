@@ -170,5 +170,6 @@ fn identify_missing(
 fn display_missing_blobs(missing_blobs: &HashMap<String, Vec<String>>) {
     for blob in missing_blobs.keys() {
         println!("{} required by: {}", blob, missing_blobs[blob].join("; "));
+        println!();
     }
 }
