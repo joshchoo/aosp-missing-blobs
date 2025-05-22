@@ -1,26 +1,27 @@
 use aosp_missing_blobs::MissingBlobs;
-use clap::{crate_description, crate_name, crate_version, App, Arg};
+use clap::{Arg, Command};
 
 fn main() {
-    let matches = App::new(crate_name!())
-        .version(crate_version!())
-        .about(crate_description!())
+    let matches = Command::new(env!("CARGO_PKG_NAME"))
+        .version(env!("CARGO_PKG_VERSION"))
+        .about(env!("CARGO_PKG_DESCRIPTION"))
         .arg(
-            Arg::with_name("PATHS")
+            Arg::new("PATHS")
                 .help("Paths to blobs")
                 .required(true)
-                .multiple(true),
+                .num_args(1..),
         )
         .arg(
-            Arg::with_name("recursive")
-                .short("r")
+            Arg::new("recursive")
+                .short('r')
                 .long("recursive")
-                .help("Read blobs in each path recursively"),
+                .help("Read blobs in each path recursively")
+                .action(clap::ArgAction::SetTrue),
         )
         .get_matches();
 
-    let paths = matches.values_of("PATHS").unwrap().collect::<Vec<_>>();
-    let recursive = matches.is_present("recursive");
+    let paths = matches.get_many::<String>("PATHS").unwrap_or_default().map(|v| v.as_str()).collect::<Vec<_>>();
+    let recursive = matches.get_flag("recursive");
 
     MissingBlobs::builder()
         .recursive(recursive)
